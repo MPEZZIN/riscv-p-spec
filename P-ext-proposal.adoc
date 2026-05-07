@@ -19165,9 +19165,9 @@ pwcvth.b _rd_p_, _rs2_ &#8594; wzip8p _rd_p_, x0, _rs2_
 
 Encoding::
 
-WZIP8P writes its 64-bit result to the even-odd register pair specified by
-`rd_p` (no write occurs if `rd_p = 0`). It is encoded in the RV32 register-pair
-OP-IMM-32 format with `f=111` and `w=10`.
+WZIP8P writes its 64-bit result to the even-odd register pair specified by `rd_p`
+(no write occurs if `rd_p = 0`).
+It is encoded in the RV32 register-pair OP-IMM-32 format with `f=111` and `w=00`.
 
 [wavedrom, ,svg]
 ....
@@ -19223,8 +19223,8 @@ pwcvth.h _rd_p_, _rs2_ &#8594; wzip16p _rd_p_, x0, _rs2_
 Encoding::
 
 WZIP16P writes its 64-bit result to the even-odd register pair specified by
-`rd_p` (no write occurs if `rd_p = 0`).  It is encoded in the RV32 register-pair
-OP-IMM-32 format with `f=111` and `w=11`.
+`rd_p` (no write occurs if `rd_p = 0`).
+It is encoded in the RV32 register-pair OP-IMM-32 format with `f=111` and `w=01`.
 
 [wavedrom, ,svg]
 ....
