@@ -2116,14 +2116,20 @@ for i = 0 .. (XLEN/8 - 1):
     b = signed(s2[(8*i+7):(8*i)])
     result = a + b
     if result > 127:
+        vxsat = 1
         d[(8*i+7):(8*i)] = to_bits(8, 127)
     else if result < -128:
+        vxsat = 1
         d[(8*i+7):(8*i)] = to_bits(8, -128)
     else:
         d[(8*i+7):(8*i)] = to_bits(8, result)
 
 X[rd] = d
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -2170,14 +2176,20 @@ for i = 0 .. (XLEN/16 - 1):
     b = signed(s2[(16*i+15):(16*i)])
     result = a + b
     if result > 32767:
+        vxsat = 1
         d[(16*i+15):(16*i)] = to_bits(16, 32767)
     else if result < -32768:
+        vxsat = 1
         d[(16*i+15):(16*i)] = to_bits(16, -32768)
     else:
         d[(16*i+15):(16*i)] = to_bits(16, result)
 
 X[rd] = d
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -2225,14 +2237,20 @@ for i = 0 .. 1:
     b = signed(s2[(32*i+31):(32*i)])
     result = a + b
     if result > 2147483647:
+        vxsat = 1
         d[(32*i+31):(32*i)] = to_bits(32, 2147483647)
     else if result < -2147483648:
+        vxsat = 1
         d[(32*i+31):(32*i)] = to_bits(32, -2147483648)
     else:
         d[(32*i+31):(32*i)] = to_bits(32, result)
 
 X[rd] = d
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -2277,14 +2295,20 @@ b = signed(X[rs2])
 result = a + b
 
 if result > (2^(XLEN-1) - 1):
+    vxsat = 1
     d = to_bits(XLEN, 2^(XLEN-1) - 1)
 else if result < -(2^(XLEN-1)):
+    vxsat = 1
     d = to_bits(XLEN, -(2^(XLEN-1)))
 else:
     d = to_bits(XLEN, result)
 
 X[rd] = d
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -2338,8 +2362,10 @@ for i = 0 .. 7:
     b = signed(s2[(8*i+7):(8*i)])
     result = a + b
     if result > 127:
+        vxsat = 1
         d[(8*i+7):(8*i)] = to_bits(8, 127)
     else if result < -128:
+        vxsat = 1
         d[(8*i+7):(8*i)] = to_bits(8, -128)
     else:
         d[(8*i+7):(8*i)] = to_bits(8, result)
@@ -2348,6 +2374,10 @@ if (rd_p != 0):
     X[rd_p*2]   = d[31:0]
     X[rd_p*2+1] = d[63:32]
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -2401,8 +2431,10 @@ for i = 0 .. 3:
     b = signed(s2[(16*i+15):(16*i)])
     result = a + b
     if result > 32767:
+        vxsat = 1
         d[(16*i+15):(16*i)] = to_bits(16, 32767)
     else if result < -32768:
+        vxsat = 1
         d[(16*i+15):(16*i)] = to_bits(16, -32768)
     else:
         d[(16*i+15):(16*i)] = to_bits(16, result)
@@ -2411,6 +2443,10 @@ if (rd_p != 0):
     X[rd_p*2]   = d[31:0]
     X[rd_p*2+1] = d[63:32]
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -2463,8 +2499,10 @@ for i = 0 .. 1:
     b = signed(s2[(32*i+31):(32*i)])
     result = a + b
     if result > 2147483647:
+        vxsat = 1
         d[(32*i+31):(32*i)] = to_bits(32, 2147483647)
     else if result < -2147483648:
+        vxsat = 1
         d[(32*i+31):(32*i)] = to_bits(32, -2147483648)
     else:
         d[(32*i+31):(32*i)] = to_bits(32, result)
@@ -2473,6 +2511,10 @@ if (rd_p != 0):
     X[rd_p*2]   = d[31:0]
     X[rd_p*2+1] = d[63:32]
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -2525,6 +2567,10 @@ for i = 0 .. (XLEN/8 - 1):
 X[rd] = d
 ----
 
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
+
 
 <<<
 ==== PSADDU.H
@@ -2570,12 +2616,17 @@ for i = 0 .. (XLEN/16 - 1):
     b = unsigned(s2[(16*i+15):(16*i)])
     result = a + b
     if result > 65535:
+        vxsat = 1
         d[(16*i+15):(16*i)] = to_bits(16, 65535)
     else:
         d[(16*i+15):(16*i)] = to_bits(16, result)
 
 X[rd] = d
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -2622,12 +2673,17 @@ for i = 0 .. 1:
     b = unsigned(s2[(32*i+31):(32*i)])
     result = a + b
     if result > 4294967295:
+        vxsat = 1
         d[(32*i+31):(32*i)] = to_bits(32, 4294967295)
     else:
         d[(32*i+31):(32*i)] = to_bits(32, result)
 
 X[rd] = d
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -2670,12 +2726,17 @@ b = unsigned(X[rs2])
 result = a + b
 
 if result > (2^XLEN - 1):
+    vxsat = 1
     d = to_bits(XLEN, 2^XLEN - 1)
 else:
     d = to_bits(XLEN, result)
 
 X[rd] = d
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -2729,6 +2790,7 @@ for i = 0 .. 7:
     b = unsigned(s2[(8*i+7):(8*i)])
     result = a + b
     if result > 255:
+        vxsat = 1
         d[(8*i+7):(8*i)] = to_bits(8, 255)
     else:
         d[(8*i+7):(8*i)] = to_bits(8, result)
@@ -2737,6 +2799,10 @@ if (rd_p != 0):
     X[rd_p*2]   = d[31:0]
     X[rd_p*2+1] = d[63:32]
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -2789,6 +2855,7 @@ for i = 0 .. 3:
     b = unsigned(s2[(16*i+15):(16*i)])
     res = a + b
     if res > 2^16 - 1:
+        vxsat = 1
         res = 2^16 - 1
     d[(16*i+15):(16*i)] = res[15:0]
 
@@ -2796,6 +2863,10 @@ if (rd_p != 0):
     X[rd_p*2]   = d[31:0]
     X[rd_p*2+1] = d[63:32]
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -2848,6 +2919,7 @@ for i = 0 .. 1:
     b = unsigned(s2[(32*i+31):(32*i)])
     res = a + b
     if res > 2^32 - 1:
+        vxsat = 1
         res = 2^32 - 1
     d[(32*i+31):(32*i)] = res[31:0]
 
@@ -2855,6 +2927,10 @@ if (rd_p != 0):
     X[rd_p*2]   = d[31:0]
     X[rd_p*2+1] = d[63:32]
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -2903,6 +2979,7 @@ for i = 0 .. (XLEN/8 - 1):
     b = signed(s2[(8*i+7):(8*i)])
     res = a - b
     if res > 2^7 - 1:
+        vxsat = 1
         res = 2^7 - 1
     else if res < -(2^7):
         res = -(2^7)
@@ -2910,6 +2987,10 @@ for i = 0 .. (XLEN/8 - 1):
 
 X[rd] = d
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -2955,13 +3036,19 @@ for i = 0 .. (XLEN/16 - 1):
     b = signed(s2[(16*i+15):(16*i)])
     res = a - b
     if res > 2^15 - 1:
+        vxsat = 1
         res = 2^15 - 1
     else if res < -(2^15):
+        vxsat = 1
         res = -(2^15)
     d[(16*i+15):(16*i)] = res[15:0]
 
 X[rd] = d
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -3017,13 +3104,19 @@ a_hi = signed(s1[63:32])
 b_hi = signed(s2[63:32])
 res_hi = a_hi - b_hi
 if res_hi > 2^31 - 1:
+    vxsat = 1
     res_hi = 2^31 - 1
 else if res_hi < -(2^31):
+    vxsat = 1
     res_hi = -(2^31)
 d[63:32] = res_hi[31:0]
 
 X[rd] = d
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -3068,12 +3161,18 @@ b = signed(X[rs2])
 res = a - b
 
 if res > 2^(XLEN-1) - 1:
+    vxsat = 1
     res = 2^(XLEN-1) - 1
 else if res < -(2^(XLEN-1)):
+    vxsat = 1
     res = -(2^(XLEN-1))
 
 X[rd] = res[XLEN-1:0]
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -3126,8 +3225,10 @@ for i = 0 .. 7:
     b = signed(s2[(8*i+7):(8*i)])
     res = a - b
     if res > 2^7 - 1:
+        vxsat = 1
         res = 2^7 - 1
     else if res < -(2^7):
+        vxsat = 1
         res = -(2^7)
     d[(8*i+7):(8*i)] = res[7:0]
 
@@ -3135,6 +3236,10 @@ if (rd_p != 0):
     X[rd_p*2]   = d[31:0]
     X[rd_p*2+1] = d[63:32]
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -3187,8 +3292,10 @@ for i = 0 .. 3:
     b = signed(s2[(16*i+15):(16*i)])
     res = a - b
     if res > 2^15 - 1:
+        vxsat = 1
         res = 2^15 - 1
     else if res < -(2^15):
+        vxsat = 1
         res = -(2^15)
     d[(16*i+15):(16*i)] = res[15:0]
 
@@ -3196,6 +3303,10 @@ if (rd_p != 0):
     X[rd_p*2]   = d[31:0]
     X[rd_p*2+1] = d[63:32]
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -3247,8 +3358,10 @@ for i = 0 .. 1:
     b = signed(s2[(32*i+31):(32*i)])
     res = a - b
     if resi > 2^31 - 1:
+        vxsat = 1
         res = 2^31 - 1
     else if res < -(2^31):
+        vxsat = 1
         res = -(2^31)
     d[(32*i+31):(32*i)] = res[31:0]
 
@@ -3256,6 +3369,10 @@ if (rd_p != 0):
     X[rd_p*2]   = d[31:0]
     X[rd_p*2+1] = d[63:32]
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -3301,11 +3418,16 @@ for i = 0 .. (XLEN/8 - 1):
     b = unsigned(s2[(8*i+7):(8*i)])
     res = a - b
     if res < 0:
+        vxsat = 1
         res = 0
     d[(8*i+7):(8*i)] = res[7:0]
 
 X[rd] = d
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -3351,11 +3473,16 @@ for i = 0 .. (XLEN/16 - 1):
     b = unsigned(s2[(16*i+15):(16*i)])
     res = a - b
     if res < 0:
+        vxsat = 1
         res = 0
     d[(16*i+15):(16*i)] = res[15:0]
 
 X[rd] = d
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -3409,11 +3536,16 @@ a_hi = unsigned(s1[63:32])
 b_hi = unsigned(s2[63:32])
 res_hi = a_hi - b_hi
 if res_hi < 0:
+    vxsat = 1
     res_hi = 0
 d[63:32] = res_hi[31:0]
 
 X[rd] = d
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -3455,10 +3587,15 @@ b = unsigned(X[rs2])
 res = a - b
 
 if res < 0:
+    vxsat = 1
     res = 0
 
 X[rd] = res[XLEN-1:0]
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -3511,6 +3648,7 @@ for i = 0 .. 7:
     b = unsigned(s2[(8*i+7):(8*i)])
     res = a - b
     if res < 0:
+        vxsat = 1
         res = 0
     d[(8*i+7):(8*i)] = res[7:0]
 
@@ -3518,6 +3656,10 @@ if (rd_p != 0):
     X[rd_p*2]   = d[31:0]
     X[rd_p*2+1] = d[63:32]
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -3570,6 +3712,7 @@ for i = 0 .. 3:
     b = unsigned(s2[(16*i+15):(16*i)])
     res = a - b
     if res < 0:
+        vxsat = 1
         res = 0
     d[(16*i+15):(16*i)] = res[15:0]
 
@@ -3577,6 +3720,10 @@ if (rd_p != 0):
     X[rd_p*2]   = d[31:0]
     X[rd_p*2+1] = d[63:32]
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
@@ -3629,6 +3776,7 @@ for i = 0 .. 1:
     b = unsigned(s2[(32*i+31):(32*i)])
     res = a - b
     if res < 0
+        vxsat = 1
         res = 0
     d[(32*i+31):(32*i)] = res[31:0]
 
@@ -3636,6 +3784,10 @@ if (rd_p != 0):
     X[rd_p*2]   = d[31:0]
     X[rd_p*2+1] = d[63:32]
 ----
+
+Notes::
+
+* `vxsat` is set to 1 if saturation occurs in any element.
 
 
 <<<
